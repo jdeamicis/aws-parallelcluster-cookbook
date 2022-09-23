@@ -28,6 +28,8 @@ from jinja2.sandbox import SandboxedEnvironment
 log = logging.getLogger()
 instance_types_data = {}
 
+SLURMDBD_STORAGE_PARAMETERS = ["SSL_CERT", "SSL_CA", "SSL_CAPATH", "SSL_KEY", "SSL_CIPHER"]
+
 
 class CriticalError(Exception):
     """Critical error for the script."""
@@ -204,6 +206,7 @@ def _get_jinja_env(template_directory, realmemory_to_ec2memory_ratio):
     )
     env.filters["uri_host"] = functools.partial(_parse_uri, attr="host")
     env.filters["uri_port"] = functools.partial(_parse_uri, attr="port")
+    env.filters["parse_storage_parameters"] = _parse_storage_parameters
 
     return env
 
@@ -380,6 +383,16 @@ def _parse_uri(uri, attr) -> str:
 
     # Parse netloc to get hostname or port
     return _parse_netloc(uri, uri_parse, attr)
+
+
+def _parse_storage_parameters(storage_parameters) -> str:
+    """Create a StorageParameters option string for Slurm configuration."""
+    opt_string = '"'
+    for key, value in storage_parameters.items():
+        if key in SLURMDBD_STORAGE_PARAMETERS:
+            opt_string = opt_string + f"{key}={value},"
+    opt_string = opt_string + '"'
+    return opt_string
 
 
 def _write_rendered_template_to_file(rendered_template, filename):
