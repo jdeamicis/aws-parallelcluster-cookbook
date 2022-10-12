@@ -183,6 +183,11 @@ def create_config(log_configs):
         "logs": {
             "logs_collected": {"files": {"collect_list": log_configs}},
             "log_stream_name": f"{gethostname()}.{{instance_id}}.default-log-stream",
+        },
+        "metrics": {
+            "namespace": "CWMetrics",
+            "append_dimensions": {"InstanceId": "${aws:InstanceId}"},
+            "metrics_collected": {"mem": {"measurement": ["used_percent"], "metrics_collection_interval": 60}}
         }
     }
 
