@@ -186,10 +186,11 @@ def create_config(log_configs, node_role):
         }
     }
     # Add collection of memory usage only on the head node
+    # TODO: add this to the CW config validation logic
     if node_role == "HeadNode":
         metrics_dict = {
             "metrics": {
-                "namespace": "CWMetrics",
+                "namespace": "ParallelClusterCloudWatchMetrics",
                 "append_dimensions": {"InstanceId": "${aws:InstanceId}"},
                 "metrics_collected": {"mem": {"measurement": ["used_percent"], "metrics_collection_interval": 60}}
             }
