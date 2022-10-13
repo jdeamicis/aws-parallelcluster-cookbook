@@ -177,19 +177,25 @@ def filter_output_fields(configs):
     return [{desired_key: config[desired_key] for desired_key in desired_keys} for config in configs]
 
 
-def create_config(log_configs):
+def create_config(log_configs, node_role):
     """Return a dict representing the structure of the output JSON."""
-    return {
+    config = {
         "logs": {
             "logs_collected": {"files": {"collect_list": log_configs}},
             "log_stream_name": f"{gethostname()}.{{instance_id}}.default-log-stream",
-        },
-        "metrics": {
-            "namespace": "CWMetrics",
-            "append_dimensions": {"InstanceId": "${aws:InstanceId}"},
-            "metrics_collected": {"mem": {"measurement": ["used_percent"], "metrics_collection_interval": 60}}
         }
     }
+    # Add collection of memory usage only on the head node
+    if node_role == "HeadNode":
+        metrics_dict = {
+            "metrics": {
+                "namespace": "CWMetrics",
+                "append_dimensions": {"InstanceId": "${aws:InstanceId}"},
+                "metrics_collected": {"mem": {"measurement": ["used_percent"], "metrics_collection_interval": 60}}
+            }
+        }
+        config.update(metrics_dict)
+    return config
 
 
 def get_dict_value(value, attributes, default=None):
@@ -212,7 +218,7 @@ def main():
     log_configs = add_log_group_name_params(args.log_group, log_configs)
     log_configs = add_instance_log_stream_prefixes(log_configs)
     log_configs = filter_output_fields(log_configs)
-    write_config(create_config(log_configs))
+    write_config(create_config(log_configs, args.node_role))
 
 
 if __name__ == "__main__":
