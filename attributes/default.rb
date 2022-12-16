@@ -483,7 +483,7 @@ when 'rhel', 'amazon'
                                              gcc-gfortran git indent intltool patchutils rcs subversion swig systemtap curl
                                              jq wget python-pip NetworkManager-config-routing-rules libibverbs-utils
                                              librdmacm-utils python3 python3-pip iptables libcurl-devel yum-plugin-versionlock
-                                             coreutils moreutils sssd sssd-tools sssd-ldap)
+                                             coreutils moreutils sssd sssd-tools sssd-ldap lua53 lua53-libs lua53-devel)
 
     # Install R via amazon linux extras
     default['cluster']['alinux_extras'] = ['R3.4']
