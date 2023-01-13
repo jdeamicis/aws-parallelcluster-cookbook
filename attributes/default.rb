@@ -139,7 +139,13 @@ default['cluster']['cfn_bootstrap']['package'] = "aws-cfn-bootstrap-py3-#{node['
 # Slurm software
 default['cluster']['slurm_plugin_dir'] = '/etc/parallelcluster/slurm_plugin'
 default['cluster']['slurm']['version'] = '22-05-7-1'
-default['cluster']['slurm']['url'] = "https://github.com/SchedMD/slurm/archive/slurm-#{node['cluster']['slurm']['version']}.tar.gz"
+default['cluster']['slurm']['commit'] = ''
+if slurm_commit_hash?
+  default['cluster']['slurm']['tar_name'] = "#{node['cluster']['slurm']['commit']}"
+else
+  default['cluster']['slurm']['tar_name'] = "slurm-#{node['cluster']['slurm']['version']}"
+end
+default['cluster']['slurm']['url'] = "https://github.com/SchedMD/slurm/archive/#{node['cluster']['slurm']['tar_name']}.tar.gz"
 default['cluster']['slurm']['sha1'] = 'a9208e0d6af8465e417d5a60a6ea82b151b6fc34'
 default['cluster']['slurm']['user'] = 'slurm'
 default['cluster']['slurm']['user_id'] = node['cluster']['reserved_base_uid'] + 1
