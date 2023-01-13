@@ -138,17 +138,17 @@ default['cluster']['cfn_bootstrap']['package'] = "aws-cfn-bootstrap-py3-#{node['
 # URLs to software packages used during install recipes
 # Slurm software
 default['cluster']['slurm_plugin_dir'] = '/etc/parallelcluster/slurm_plugin'
-default['cluster']['slurm']['version'] = '22-05-7-1'
+default['cluster']['slurm']['version'] = '23-02-0pre1'
 # WARNING: specify the commit hash only if a development version of Slurm must be used
 # WARNING: the whole commit hash must be used here (not a shortened version of the hash)
-default['cluster']['slurm']['commit'] = ''
+default['cluster']['slurm']['commit'] = 'eac027698b55573db6a72751fa3820350b4977dc'
 default['cluster']['slurm']['tar_name'] = if slurm_commit_hash?
                                             "#{node['cluster']['slurm']['commit']}"
                                           else
                                             "slurm-#{node['cluster']['slurm']['version']}"
                                           end
 default['cluster']['slurm']['url'] = "https://github.com/SchedMD/slurm/archive/#{node['cluster']['slurm']['tar_name']}.tar.gz"
-default['cluster']['slurm']['sha1'] = 'a9208e0d6af8465e417d5a60a6ea82b151b6fc34'
+default['cluster']['slurm']['sha1'] = '31bb7c53a9a6606a53fecac80742dd5a9650a2f7'
 default['cluster']['slurm']['user'] = 'slurm'
 default['cluster']['slurm']['user_id'] = node['cluster']['reserved_base_uid'] + 1
 default['cluster']['slurm']['group'] = node['cluster']['slurm']['user']
