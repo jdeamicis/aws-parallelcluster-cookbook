@@ -105,7 +105,7 @@ bash 'copy license stuff' do
   cwd Chef::Config[:file_cache_path]
   code <<-SLURMLICENSE
     set -e
-    cd slurm-slurm-#{node['cluster']['slurm']['version']}
+    cd slurm-#{node['cluster']['slurm']['tar_name']}
     cp -v COPYING #{node['cluster']['license_dir']}/slurm/COPYING
     cp -v DISCLAIMER #{node['cluster']['license_dir']}/slurm/DISCLAIMER
     cp -v LICENSE.OpenSSL #{node['cluster']['license_dir']}/slurm/LICENSE.OpenSSL
