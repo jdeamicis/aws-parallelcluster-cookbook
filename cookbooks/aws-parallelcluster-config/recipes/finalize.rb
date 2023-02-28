@@ -19,7 +19,7 @@ fetch_config 'Fetch and load cluster configs' unless node['cluster']['scheduler'
 
 if !node['cluster']['custom_node_package'].nil? && !node['cluster']['custom_node_package'].empty?
   # Install custom aws-parallelcluster-node package
-  include_recipe 'aws-parallelcluster-install::parallelcluster_custom_node'
+  include_recipe 'aws-parallelcluster-install::custom_parallelcluster_node'
 end
 
 # Restart supervisord
