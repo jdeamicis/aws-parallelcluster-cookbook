@@ -97,6 +97,7 @@ def share_munge_head_node
   end
 end
 
+# TODO: move munge key to another shared location or define a parameter for its location
 def setup_munge_compute_node
   # Get munge key
   bash 'get_munge_key' do
