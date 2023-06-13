@@ -143,15 +143,9 @@ directory '/etc/sysconfig' do
   mode '0644'
 end
 
-ruby_block 'get_compute_nodename' do
-  block do
-    node.run_state['slurm_compute_nodename'] = slurm_nodename
-  end
-end
-
-template "/etc/sysconfig/slurmd" do
-  source 'compute_node_finalize/slurm/slurm.sysconfig.erb'
-  user 'root'
-  group 'root'
+file '/etc/sysconfig/slurmd' do
+  content("SLURMD_OPTIONS='-N #{slurm_nodename} -Z --conf=\"Feature=slurm_dynamic\"'")
   mode '0644'
+  owner 'root'
+  group 'root'
 end

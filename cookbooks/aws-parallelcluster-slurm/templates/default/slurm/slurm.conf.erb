@@ -25,7 +25,7 @@ LaunchParameters=enable_nss_slurm
 <% end -%>
 #
 # CLOUD CONFIGS OPTIONS
-<% if node['cluster']['use_private_hostname'] == 'true' or node['cluster']['dns_domain'].nil? or node['cluster']['dns_domain'].empty? -%>
+<% if node['cluster']['use_private_hostname'] == 'true' or node['cluster']['dns_domain'].nil? or node['cluster']['dns_domain'].empty? or node['cluster']['use_external_slurm_dynamic_nodes'] == 'true' -%>
 SlurmctldParameters=idle_on_node_suspend,power_save_min_interval=30,node_reg_mem_percent=<%= node['cluster']['slurm_node_reg_mem_percent'] %>
 TreeWidth=65533
 <% else -%>
@@ -78,7 +78,15 @@ SlurmdDebug=info
 SlurmdLogFile=/var/log/slurmd.log
 DebugFlags=Power
 JobCompType=jobcomp/none
-#
+
+# TEST STUFF FOR EXTERNAL SLURM DYNAMIC NODES
+<% if node['cluster']['use_external_slurm_dynamic_nodes'] == 'true' -%>
+  # TODO: find appropriate value or make it a variable
+  MaxNodeCount=2000
+  Nodeset=slurm_dynamic_nodes Feature=slurm_dynamic
+  PartitionName=external Nodes=slurm_dynamic_nodes
+<% end -%>
+
 # WARNING!!! The slurm_parallelcluster.conf file included below can be updated by the pcluster process.
 # Please do not edit it.
 include slurm_parallelcluster.conf

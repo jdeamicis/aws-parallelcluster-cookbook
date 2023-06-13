@@ -91,8 +91,12 @@ def share_munge_head_node
     code <<-HEAD_SHARE_MUNGE_KEY
       set -e
       mkdir -p /home/#{node['cluster']['cluster_user']}/.munge
+      mkdir -p #{node['cluster']['slurm']['install_dir']}/etc/.munge
+      chmod 700 #{node['cluster']['slurm']['install_dir']}/etc/.munge
       # Copy key to shared dir
       cp /etc/munge/munge.key /home/#{node['cluster']['cluster_user']}/.munge/.munge.key
+      cp /etc/munge/munge.key #{node['cluster']['slurm']['install_dir']}/etc/.munge/.munge.key
+      chmod 600 #{node['cluster']['slurm']['install_dir']}/etc/.munge/.munge.key
     HEAD_SHARE_MUNGE_KEY
   end
 end

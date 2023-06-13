@@ -104,15 +104,21 @@ template "#{node['cluster']['slurm']['install_dir']}/etc/pcluster/.slurm_plugin/
   )
 end
 
-link "#{node['cluster']['slurm']['install_dir']}/etc/scripts/prolog.d/90_pcluster_health_check_manager" do
-  to "#{node['cluster']['slurm']['install_dir']}/etc/pcluster/.slurm_plugin/scripts/prolog.d/90_pcluster_health_check_manager"
-end
-
 cookbook_file "#{node['cluster']['slurm']['install_dir']}/etc/pcluster/.slurm_plugin/scripts/epilog.d/90_pcluster_noop" do
   source 'config_slurm/scripts/epilog.d/90_pcluster_noop'
   owner 'root'
   group 'root'
   mode '0755'
+end
+
+if node['cluster']['use_external_slurm_dynamic_nodes'] == 'false'
+  link "#{node['cluster']['slurm']['install_dir']}/etc/scripts/prolog.d/90_pcluster_health_check_manager" do
+    to "#{node['cluster']['slurm']['install_dir']}/etc/pcluster/.slurm_plugin/scripts/prolog.d/90_pcluster_health_check_manager"
+  end
+else
+  link "#{node['cluster']['slurm']['install_dir']}/etc/scripts/prolog.d/90_pcluster_noop" do
+    to "#{node['cluster']['slurm']['install_dir']}/etc/pcluster/.slurm_plugin/scripts/epilog.d/90_pcluster_noop"
+  end
 end
 
 link "#{node['cluster']['slurm']['install_dir']}/etc/scripts/epilog.d/90_pcluster_noop" do
