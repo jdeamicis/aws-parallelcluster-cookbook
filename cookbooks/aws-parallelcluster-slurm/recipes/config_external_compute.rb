@@ -106,7 +106,7 @@ end
 enable_munge_service
 
 # ----------------------------------------------------------------------------------------------------------------------
-# CONFIGURE SLURMD
+# CONFIGURE AND START SLURMD
 
 # TODO: generalize this -- I don't know yet how
 slurm_nodename = node['cluster']['slurm']['slurm_nodename']
@@ -148,4 +148,14 @@ file '/etc/sysconfig/slurmd' do
   mode '0644'
   owner 'root'
   group 'root'
+end
+
+execute 'systemctl daemon-reload' do
+  command "systemctl daemon-reload"
+  user 'root'
+end
+
+service "slurmd" do
+  supports restart: true
+  action %i(enable start)
 end
