@@ -88,43 +88,7 @@ remote_directory "#{node['cluster']['sources_dir']}/slurm_patches" do
 end
 
 # Install Slurm
-bash 'make install' do
-  not_if { redhat_ubi? }
-  user 'root'
-  group 'root'
-  cwd Chef::Config[:file_cache_path]
-  code <<-SLURM
-    set -e
-
-    # python3 is required to build slurm >= 20.02
-    source #{cookbook_virtualenv_path}/bin/activate
-
-    tar xf #{slurm_tarball}
-    cd slurm-#{slurm_tar_name}
-
-    # Apply possible Slurm patches
-    shopt -s nullglob  # with this an empty slurm_patches directory does not trigger the loop
-    for patch in #{node['cluster']['sources_dir']}/slurm_patches/*.diff; do
-      echo "Applying patch ${patch}..."
-      patch --ignore-whitespace -p1 < ${patch}
-      echo "...DONE."
-    done
-    shopt -u nullglob
-
-    # Configure Slurm
-    ./configure --prefix=#{slurm_install_dir} --with-pmix=/opt/pmix --with-jwt=/opt/libjwt --enable-slurmrestd
-
-    # Build Slurm
-    CORES=$(grep processor /proc/cpuinfo | wc -l)
-    make -j $CORES
-    make install
-    make install-contrib
-
-    deactivate
-  SLURM
-  # TODO: Fix, so it works for upgrade
-  creates "#{slurm_install_dir}/bin/srun"
-end
+include_recipe 'aws-parallelcluster-slurm::build_slurm'
 
 # Copy required licensing files
 directory "#{node['cluster']['license_dir']}/slurm"
