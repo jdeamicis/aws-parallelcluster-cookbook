@@ -156,3 +156,7 @@ suites:
         scheduler: 'slurm'
         slurm:
           install_dir: "/opt/slurm"
+  - name: slurm_system_tests
+    run_list:
+      - recipe[aws-parallelcluster-tests::setup]
+      - recipe[aws-parallelcluster-slurm::clean_and_build_slurm]
