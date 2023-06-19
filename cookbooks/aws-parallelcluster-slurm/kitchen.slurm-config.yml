@@ -156,3 +156,19 @@ suites:
         scheduler: 'slurm'
         slurm:
           install_dir: "/opt/slurm"
+  - name: test_attach_external_compute
+    run_list:
+      - recipe[aws-parallelcluster::add_dependencies]
+      - recipe[aws-parallelcluster-slurm::config_external_compute]
+    attributes:
+      dependencies:
+        - resource:package_repos
+        # TODO: remove this and move Slurm dependencies into the appropriate Slurm recipes
+        - resource:install_packages
+      cluster:
+        # TODO: some of this information must be provided as input to whatever script we provide to reconfigure the
+        # external instance
+        head_node_private_ip: 10.0.0.185
+        enable_nss_slurm: 'true'
+        slurm:
+          slurm_nodename: 'test-external-compute-1'
