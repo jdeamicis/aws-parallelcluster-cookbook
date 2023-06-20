@@ -15,3 +15,4 @@ supports 'ubuntu', '>= 18.04'
 supports 'redhat', '= 8.7'
 
 depends 'aws-parallelcluster-shared', '~> 3.7.0'
+depends 'aws-parallelcluster-environment', '~> 3.7.0'

@@ -158,7 +158,7 @@ suites:
           install_dir: "/opt/slurm"
   - name: test_attach_external_compute
     run_list:
-      - recipe[aws-parallelcluster::add_dependencies]
+      - recipe[aws-parallelcluster-tests::setup]
       - recipe[aws-parallelcluster-slurm::config_external_compute]
     attributes:
       dependencies:

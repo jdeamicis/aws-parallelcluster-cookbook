@@ -13,7 +13,7 @@
 
 return if on_docker?
 
-if node['cluster']['node_type'] == "ComputeFleet"
+if node['cluster']['node_type'] == "ComputeFleet" or node['cluster']['node_type'] == "Login"
   volume "mount /home" do
     action :mount
     shared_dir '/home'

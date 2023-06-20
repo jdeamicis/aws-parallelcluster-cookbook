@@ -45,3 +45,20 @@ suites:
         custom_node_package: https://github.com/aws/aws-parallelcluster-node/archive/develop.tar.gz
         python-version: 3.9.16
         node_virtualenv_path: /opt/parallelcluster/pyenv/versions/node_virtualenv
+  - name: test_attach_login_node
+    run_list:
+      - recipe[aws-parallelcluster-tests::setup]
+      - recipe[aws-parallelcluster-computefleet::config_login_node]
+    attributes:
+      dependencies:
+        - resource:package_repos
+        # TODO: remove this and move Slurm dependencies into the appropriate Slurm recipes
+        - resource:install_packages
+      cluster:
+        # TODO: this is just a set of convenience variables for the kitchen test: in reality we will have everything
+        # available from the dna.json
+        head_node_private_ip: 10.0.0.88
+        node_type: Login
+        shared_dir_head: /opt/parallelcluster/shared
+        head_node_home_path: /home
+        dns_domain: test-login-node-01.pcluster
