@@ -136,3 +136,11 @@ if !node['cluster']['dns_domain'].nil? && !node['cluster']['dns_domain'].empty?
     action :configure
   end
 end
+
+# ----------------------------------------------------------------------------------------------------------------------
+# INSTALL EFA (WHICH PROVIDES OPENMPI)
+
+efa 'Install EFA'
+efa 'Configure system for EFA' do
+  action :configure
+end
